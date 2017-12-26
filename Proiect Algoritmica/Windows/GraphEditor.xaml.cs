@@ -10,17 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+// ReSharper disable once CheckNamespace
 namespace Proiect_Algoritmica
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for GraphEditor.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class GraphEditor
     {
-        public MainWindow()
+        public GraphEditor()
         {
             InitializeComponent();
         }
