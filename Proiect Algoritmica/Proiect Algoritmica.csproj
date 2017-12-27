@@ -68,6 +68,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\TextBoxx.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\GraphEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -80,7 +84,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Scripts\GraphEditor\LineCreator.cs" />
     <Compile Include="Scripts\GraphEditor\NodeCreator.cs" />
+    <Compile Include="Scripts\GraphEditor\Road.cs" />
     <Compile Include="Scripts\GraphEditor\WorkSpaceInputListener.cs" />
     <Compile Include="Scripts\Graphs\Node.cs" />
     <Compile Include="Scripts\MainWindow\ListViewManager.cs" />
@@ -89,6 +95,9 @@
     <Compile Include="Scripts\GraphEditor\GraphEditorEngine.cs" />
     <Compile Include="Views\Node.xaml.cs">
       <DependentUpon>Node.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TextBoxx.xaml.cs">
+      <DependentUpon>TextBoxx.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\GraphEditor.xaml.cs">
       <DependentUpon>GraphEditor.xaml</DependentUpon>

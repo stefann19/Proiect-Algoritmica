@@ -6,9 +6,9 @@
              xmlns:local="clr-namespace:Proiect_Algoritmica.Views"
              mc:Ignorable="d"
              d:DesignHeight="50" d:DesignWidth="50">
-    <Grid>
-        <Ellipse Name="Ellipse" Fill="Cyan" />
-        <Label Name="Label" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Content="1" Foreground="Black"></Label>
+    <Grid ZIndex="1" >
+        <Ellipse Name="Ellipse" Fill="Cyan" IsHitTestVisible="True"/>
+        <Label IsHitTestVisible="False" Name="Label" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center" Content="1" Foreground="Black"></Label>
     </Grid>
 </UserControl>
 

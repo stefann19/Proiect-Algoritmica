@@ -20,9 +20,62 @@ namespace Proiect_Algoritmica.Views
     /// </summary>
     public partial class Node : UserControl
     {
+        public Scripts.Graphs.Node NodeParent;
+        private bool move;
         public Node()
         {
             InitializeComponent();
+
+            move = false;
+            Ellipse.MouseLeftButtonDown += Ellipse_PreviewMouseLeftButtonDown;
+            Ellipse.MouseLeftButtonUp += Ellipse_PreviewMouseLeftButtonUp;
+            Ellipse.MouseMove += Ellipse_MouseMove;
+
+            Ellipse.MouseRightButtonDown += Ellipse_PreviewMouseRightButtonDown;
+            Ellipse.MouseRightButtonUp += Ellipse_PreviewMouseRightButtonUp;
+
+        }
+
+      
+
+        private void Ellipse_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            NodeParent.GraphParent.GraphEditorEngine.LineCreator.EndingNode = GetNodeFromObj(sender);
+            e.Handled = true;
+        }
+
+        private void Ellipse_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            NodeParent.GraphParent.GraphEditorEngine.LineCreator.StartingNode = GetNodeFromObj(sender);
+            e.Handled = true;
+
+        }
+
+        private void Ellipse_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            move = false;
+        }
+
+        private void Ellipse_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //Scripts.Graphs.Node node = GetNodeFromObj(sender);
+            move = true;
+            e.Handled = true;
+        }
+        private void Ellipse_MouseMove(object sender, MouseEventArgs e)
+        {
+            //e.Handled = true;
+            if (move)
+            {
+                NodeParent.Position = Mouse.GetPosition(NodeParent.GraphParent.GraphEditorEngine.GraphEditor.WorkSpace);
+            }
+        }
+
+
+        private Scripts.Graphs.Node GetNodeFromObj(object sender)
+        {
+            Node node = ((sender as Ellipse)?.Parent as Grid)?.Parent as Node;
+            return node?.NodeParent;
         }
     }
 }

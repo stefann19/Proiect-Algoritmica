@@ -13,6 +13,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         public Proiect_Algoritmica.GraphEditor GraphEditor { get; set; }
         public Graph Graph { get; set; }
         public NodeCreator NodeCreator { get; set; }
+        public LineCreator LineCreator { get; set; }
         public WorkSpaceInputListener WorkSpaceInputListener { get; set; }
         /// <summary>
         /// Json serialization
@@ -27,16 +28,28 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         /// <param name="graphName"></param>
         public GraphEditorEngine(string graphName)
         {
-            Graph = new Graph(graphName);
+            if (System.IO.File.Exists($"{MyConstants.ExePath}\\{graphName}.json"))
+            {
+
+                string jsonInfo = System.IO.File.ReadAllText($"{MyConstants.ExePath}\\{graphName}.json");
+                Graph = JsonConvert.DeserializeObject<Graph>(jsonInfo);
+            }
+            else
+            {
+                Graph = new Graph(graphName);
+            }
             Init();
+
         }
 
         private void Init()
         {
+            Graph.GraphEditorEngine = this;
             GraphEditor = new Proiect_Algoritmica.GraphEditor {Title = $"{Graph.Name} graph editor"};
             GraphEditor.Show();
             GraphEditor.Closed += GraphEditor_Closed;
             NodeCreator = new NodeCreator(Graph,GraphEditor.WorkSpace);
+            LineCreator = new LineCreator(Graph,GraphEditor.WorkSpace);
             WorkSpaceInputListener = new WorkSpaceInputListener(this);
         }
 

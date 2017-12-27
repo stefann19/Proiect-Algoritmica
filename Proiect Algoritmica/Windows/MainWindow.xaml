@@ -32,7 +32,7 @@
 
             </Grid>
 
-            <ListView HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Name="GraphList" >
+            <ListView HorizontalAlignment="Stretch" Grid.Row="2" VerticalAlignment="Stretch" Name="GraphList" ItemsSource="{Binding TrackCollection}" MouseDoubleClick="ListView_MouseDoubleClick" >
             </ListView>
             
         </Grid>
@@ -40,7 +40,7 @@
         <Grid  Grid.Column="1">
             <Controls:Flyout Name="Flyout" ClipToBounds="True" HorizontalContentAlignment="Stretch" Header="Graph" Position="Left" IsOpen="True">
                 <!-- Your custom content here -->
-                <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="PreviewCanvas">
+                <Canvas IsHitTestVisible="False" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Name="PreviewCanvas">
                    
                 </Canvas>
             </Controls:Flyout>

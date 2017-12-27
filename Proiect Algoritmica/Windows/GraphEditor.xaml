@@ -38,11 +38,10 @@
                 <RowDefinition Height="1*"/>
 
             </Grid.RowDefinitions>
-            <Rectangle Grid.Column="2" Grid.RowSpan="14" Fill="Cyan"></Rectangle>
+            <TextBox Grid.Column="1" Text="Something" Foreground="Black" BorderBrush="{x:Null}"></TextBox>
+            <Rectangle Grid.Row="0" Grid.Column="2" Grid.RowSpan="14" Fill="Cyan"></Rectangle>
         </Grid>
-        <Canvas Background="Transparent" Name="WorkSpace" Grid.Column="1">
-
-        </Canvas>
+        <Canvas Background="Transparent" Name="WorkSpace" Grid.Column="1"/>
 
     </Grid>
 </controls:MetroWindow>

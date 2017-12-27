@@ -30,6 +30,7 @@ namespace Proiect_Algoritmica.Scripts.MainWindow
 
             listView.ItemsSource = Graphs;
             listView.SelectionChanged += ListView_SelectionChanged;
+            
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -48,6 +49,7 @@ namespace Proiect_Algoritmica.Scripts.MainWindow
             Proiect_Algoritmica.MainWindow.PreviewCanvasS.RenderTransform = scaletransform;
             Graph graph = JsonConvert.DeserializeObject<Graph>(jsonInfo);
             NodeCreator nodeCreator = new NodeCreator(graph, Proiect_Algoritmica.MainWindow.PreviewCanvasS);
+            LineCreator line = new LineCreator(graph, Proiect_Algoritmica.MainWindow.PreviewCanvasS);
 
             double width =  Proiect_Algoritmica.MainWindow.FlyoutS.ActualWidth / (nodeCreator.MaxPoint.X - nodeCreator.MinPoint.X)  ;
             double height =  Proiect_Algoritmica.MainWindow.FlyoutS.ActualHeight / (nodeCreator.MaxPoint.Y - nodeCreator.MinPoint.Y)  ;

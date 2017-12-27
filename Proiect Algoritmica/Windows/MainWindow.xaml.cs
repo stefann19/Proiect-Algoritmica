@@ -69,6 +69,10 @@ namespace Proiect_Algoritmica
         }
 
 
-
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (Proiect_Algoritmica.MainWindow.GraphListS.SelectedItem == null) return;
+            GraphEditorEngine graphEditorEngine = new GraphEditorEngine(MainWindow.GraphListS.SelectedItem.ToString());
+        }
     }
 }
