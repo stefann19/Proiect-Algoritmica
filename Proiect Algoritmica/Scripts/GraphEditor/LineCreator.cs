@@ -25,13 +25,14 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         {
             Graph.Roads.ToList().ForEach(road =>
             {
-                road.StartingNode = Graph.Nodes[road.StaringNodeName];
-                road.EndingNode = Graph.Nodes[road.EndingNodeName];
+                road.StartingNode = Graph.Nodes[road.StaringNodeIndex];
+                road.EndingNode = Graph.Nodes[road.EndingNodeIndex];
                 road.Line = CreateLine(road.StartingNode, road.EndingNode);
+                WorkSpace.Children.Add(road.Line);
                 road.CostHeader = CreateCostHeader((int)road.Cost, road.StartingNode, road.EndingNode);
                 road.CostHeader.ParentRoad = road;
-                Graph.Nodes[road.StaringNodeName].Roads.Add(road.EndingNode,road);
-                Graph.Nodes[road.EndingNodeName].Roads.Add(road.StartingNode, road);
+                Graph.Nodes[road.StaringNodeIndex].Roads.Add(road.EndingNode,road);
+                Graph.Nodes[road.EndingNodeIndex].Roads.Add(road.StartingNode, road);
             });
         }
 
@@ -41,39 +42,94 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             get => throw new NotImplementedException();
             set
             {
+                if(StartingNode==null)return;
+                
                 if(value==null)return; 
                 CreateRoad(StartingNode, value);
             }
         }
-        
-
-        public Line CreateLine(Node startingNode,Node endingNode)
+        public static Shape DrawLinkArrow(Point p1, Point p2)
         {
-            if (Graph.Nodes[startingNode.NodeName].Roads.ContainsKey(endingNode)) return null;
-            Line line = new Line
-            {
-                X1 = startingNode.Position.X,
-                Y1 = startingNode.Position.Y,
-                X2 = endingNode.Position.X,
-                Y2 = endingNode.Position.Y,
-                Stroke = Brushes.DarkCyan,
-                StrokeThickness = 4
-            };
+            Vector v = Point.Subtract(p2, p1);
+            v.Normalize();
+            p1 = p1 + v * MyConstants.NodeSize / 2f;
+            p2 = p2 - v * MyConstants.NodeSize / 2f;
+
+            GeometryGroup lineGroup = new GeometryGroup();
+            double theta = Math.Atan2((p2.Y - p1.Y), (p2.X - p1.X)) * 180 / Math.PI;
+
+            PathGeometry pathGeometry = new PathGeometry();
+            PathFigure pathFigure = new PathFigure();
+            Point p = new Point(p1.X  +((p2.X - p1.X) / 1), p1.Y +((p2.Y - p1.Y) / 1));
+            pathFigure.StartPoint = p;
+
+            Point lpoint = new Point(p.X + 6, p.Y + 15);
+            Point rpoint = new Point(p.X - 6, p.Y + 15);
+            LineSegment seg1 = new LineSegment();
+            seg1.Point = lpoint;
+            pathFigure.Segments.Add(seg1);
+
+            LineSegment seg2 = new LineSegment();
+            seg2.Point = rpoint;
+            pathFigure.Segments.Add(seg2);
+
+            LineSegment seg3 = new LineSegment();
+            seg3.Point = p;
+            pathFigure.Segments.Add(seg3);
+
+            pathGeometry.Figures.Add(pathFigure);
+            RotateTransform transform = new RotateTransform();
+            transform.Angle = theta + 90;
+            transform.CenterX = p.X;
+            transform.CenterY = p.Y;
+            pathGeometry.Transform = transform;
+            lineGroup.Children.Add(pathGeometry);
+
+            LineGeometry connectorGeometry = new LineGeometry();
+            connectorGeometry.StartPoint = p1;
+            connectorGeometry.EndPoint = p2;
+            lineGroup.Children.Add(connectorGeometry);
+            System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
+            path.Data = lineGroup;
+            path.StrokeThickness = 2;
+            path.Stroke = path.Fill = Brushes.Black;
+
+            return path;
+        }
+
+        public static Shape CreateLine(Node startingNode,Node endingNode)
+        {
+            if (startingNode == null) return null;
+            if (endingNode == null) return null;
+
+            //Shape s = DrawLinkArrow(startingNode.Position, endingNode.Position);
+            //WorkSpace.Children.Add(s);
+            Shape line = DrawLinkArrow(startingNode.Position, endingNode.Position);
+
+            line.Stroke = Brushes.DarkCyan;
+            line.StrokeThickness = 4;
+            
 
             Panel.SetZIndex(line,-2);
-            WorkSpace.Children.Add(line);
 
 
 
-            StartingNode = null;
-            EndingNode = null;
+
+          
             return line;
         }
 
         public void CreateRoad(Node startingNode, Node endingNode)
         {
-            Line line = CreateLine(startingNode, endingNode);
-            if(line==null)return;
+            if(startingNode == endingNode)return;
+            Shape line = CreateLine(startingNode, endingNode);
+            if (Graph.Nodes[startingNode.NodeIndex].Roads.ContainsKey(endingNode)) return;
+            WorkSpace.Children.Add(line);
+            StartingNode = null;
+            EndingNode = null;
+
+
+
             Random rnd = new Random();
             int rand = rnd.Next(0, 100);
             Road road = new Road
@@ -87,8 +143,8 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             };
             road.CostHeader.ParentRoad = road;
             Graph.Roads.Add(road);
-            Graph.Nodes[road.StaringNodeName].Roads.Add(road.EndingNode, road);
-            Graph.Nodes[road.EndingNodeName].Roads.Add(road.StartingNode, road);
+            Graph.Nodes[road.StaringNodeIndex].Roads.Add(road.EndingNode, road);
+            Graph.Nodes[road.EndingNodeIndex].Roads.Add(road.StartingNode, road);
         }
 
         private TextBoxx CreateCostHeader(int Cost,Node startingNode, Node endingNode)

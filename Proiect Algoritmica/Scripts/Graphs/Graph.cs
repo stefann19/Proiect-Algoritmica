@@ -25,13 +25,13 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         public Graph(string name)
         {
             Name = name;
-            Nodes = new Dictionary<string, Node>();
+            Nodes = new Dictionary<int, Node>();
             Roads = new HashSet<Road>();
         }
 
         public string Name { get; set; }
 
-        public Dictionary<string,Node> Nodes { get; set; }
+        public Dictionary<int,Node> Nodes { get; set; }
 
         public HashSet<Road> Roads { get; set; }
 

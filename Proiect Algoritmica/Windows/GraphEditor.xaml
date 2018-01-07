@@ -38,10 +38,78 @@
                 <RowDefinition Height="1*"/>
 
             </Grid.RowDefinitions>
-            <TextBox Grid.Column="1" Text="Something" Foreground="Black" BorderBrush="{x:Null}"></TextBox>
             <Rectangle Grid.Row="0" Grid.Column="2" Grid.RowSpan="14" Fill="Cyan"></Rectangle>
+
+            <Button Name="BT_GenericParsing" Grid.Column="1" Grid.Row="0">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Generic parsing"/>
+                    <TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text="starting from the green node"/>
+                </StackPanel>
+            </Button>
+            <Button Name="BT_BFParsing" Grid.Column="1" Grid.Row="1">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Breadth First parsing"/>
+                    <TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text="starting from the green node"/>
+                </StackPanel>
+            </Button>
+            <Button Name="BT_DFParsing" Grid.Column="1" Grid.Row="2">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Depth First parsing"/>
+                    <TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text="starting from the green node"/>
+                </StackPanel>
+            </Button>
+            <Button Name="BT_GenericTree" Grid.Column="1" Grid.Row="3">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Generic Tree"/>
+                    <!--<TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text=""/>-->
+                </StackPanel>
+            </Button>
+            <Button Name="BT_KruskalTree" Grid.Column="1" Grid.Row="4">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Krusal Tree"/>
+                    <!--<TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text=""/>-->
+                </StackPanel>
+            </Button>
+            <Button Name="BT_PrimeTree" Grid.Column="1" Grid.Row="5">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Prime Tree"/>
+                    <!--<TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text=""/>-->
+                </StackPanel>
+            </Button>
+            <Button Name="BT_Dijkstra" Grid.Column="1" Grid.Row="6">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Dijkstra"/>
+                    <TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text="from green node to red node"/>
+                </StackPanel>
+            </Button>
+            <Button Name="BT_BellmanFord" Grid.Column="1" Grid.Row="7">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Bellman Ford"/>
+                    <TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text="from green node to red node"/>
+                </StackPanel>
+            </Button>
+            <Button Name="BT_FLOYDWARSHALL" Grid.Column="1" Grid.Row="8">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="FLOYD-WARSHALL"/>
+                    <TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text="from green node to red node"/>
+                </StackPanel>
+            </Button>
+            <Button Name="BT_EulerianCycle" Grid.Column="1" Grid.Row="9">
+                <StackPanel>
+                    <TextBlock Foreground="Cyan" FontSize="17" HorizontalAlignment="Center" Text="Eulerian Cycle"/>
+                    <TextBlock Foreground="LightCyan" HorizontalAlignment="Center" Text="from green node to red node"/>
+                </StackPanel>
+            </Button>
         </Grid>
-        <Canvas Background="Transparent" Name="WorkSpace" Grid.Column="1"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="7*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Canvas Grid.Row="0" Background="Transparent" Name="WorkSpace" Margin="0,0,0.2,0.4"/>
+            <TextBlock Name="TB_Results" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Open Sans" FontSize="30"></TextBlock>
+        </Grid>
+
 
     </Grid>
 </controls:MetroWindow>

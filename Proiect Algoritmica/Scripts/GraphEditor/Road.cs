@@ -22,7 +22,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         private double _cost;
 
         [JsonIgnore]
-        public Line Line { get; set; }
+        public Shape Line { get; set; }
 
         public double Cost
         {
@@ -45,7 +45,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             set
             {
                 _startingNode = value;
-                StaringNodeName = _startingNode.NodeName;
+                StaringNodeIndex = _startingNode.NodeIndex;
                 
             }
         }
@@ -57,11 +57,11 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             set
             {
                 _endingNode = value;
-                EndingNodeName = _endingNode.NodeName;
+                EndingNodeIndex = _endingNode.NodeIndex;
             }
         }
 
-        public string StaringNodeName { get; set; }
-        public string EndingNodeName { get; set; }
+        public int StaringNodeIndex { get; set; }
+        public int EndingNodeIndex { get; set; }
     }
 }

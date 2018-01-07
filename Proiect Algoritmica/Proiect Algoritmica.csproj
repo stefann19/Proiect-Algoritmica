@@ -84,11 +84,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Scripts\GraphEditor\AlgorithmHighlighter.cs" />
     <Compile Include="Scripts\GraphEditor\LineCreator.cs" />
     <Compile Include="Scripts\GraphEditor\NodeCreator.cs" />
     <Compile Include="Scripts\GraphEditor\Road.cs" />
     <Compile Include="Scripts\GraphEditor\WorkSpaceInputListener.cs" />
     <Compile Include="Scripts\Graphs\Node.cs" />
+    <Compile Include="Scripts\Graphs\TreeParsings.cs" />
     <Compile Include="Scripts\MainWindow\ListViewManager.cs" />
     <Compile Include="Scripts\MyConstants.cs" />
     <Compile Include="Scripts\Graphs\Graph.cs" />

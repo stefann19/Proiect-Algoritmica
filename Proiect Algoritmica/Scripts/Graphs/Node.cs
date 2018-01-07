@@ -20,10 +20,10 @@ namespace Proiect_Algoritmica.Scripts.Graphs
 
         }
 
-        public Node(Views.Node nodeUi, string nodeName)
+        public Node(Views.Node nodeUi, int nodeName)
         {
             NodeUi = nodeUi;
-            NodeName = nodeName;
+            NodeIndex = nodeName;
             Position = new Point(NodeUi.Margin.Left+NodeUi.Width/2f,NodeUi.Margin.Top+NodeUi.Height/2f);
             Roads = new Dictionary<Node, Road>();
         }
@@ -43,20 +43,23 @@ namespace Proiect_Algoritmica.Scripts.Graphs
                 NodeUi.Margin = new Thickness(value.X-MyConstants.NodeSize/2f,value.Y-MyConstants.NodeSize/2f,0,0);
                 Roads?.Values.ToList().ForEach(road =>
                 {
-                    Point xy1 = new Point(road.Line.X1,road.Line.Y1);
-                    Point xy2 = new Point(road.Line.X2,road.Line.Y2);
-                    if (Point.Subtract(xy1, value).LengthSquared < Point.Subtract(xy2, value).LengthSquared)
-                    {
-                        road.Line.X1 = value.X;
-                        road.Line.Y1 = value.Y;
-                    }
-                    else
-                    {
-                        road.Line.X2 = value.X;
-                        road.Line.Y2 = value.Y;
-                    }
-                    Point p = new Point((road.Line.X1 + road.Line.X2) / 2f, (road.Line.Y1 + road.Line.Y2) / 2f);
-                    road.CostHeader.Margin = new Thickness(p.X,p.Y,0,0);
+                    road.StartingNode.GraphParent.GraphEditorEngine.GraphEditor.WorkSpace.Children.Remove(road.Line);
+                    road.Line = LineCreator.CreateLine(road.StartingNode, road.EndingNode);
+                    road.StartingNode.GraphParent.GraphEditorEngine.GraphEditor.WorkSpace.Children.Add(road.Line);
+                    //Point xy1 = new Point(road.Line.X1,road.Line.Y1);
+                    //Point xy2 = new Point(road.Line.X2,road.Line.Y2);
+                    //if (Point.Subtract(xy1, value).LengthSquared < Point.Subtract(xy2, value).LengthSquared)
+                    //{
+                    //    road.Line.X1 = value.X;
+                    //    road.Line.Y1 = value.Y;
+                    //}
+                    //else
+                    //{
+                    //    road.Line.X2 = value.X;
+                    //    road.Line.Y2 = value.Y;
+                    //}
+                    Point p = new Point(road.StartingNode.Position.X + road.EndingNode.Position.X, road.StartingNode.Position.Y + road.EndingNode.Position.Y);
+                    road.CostHeader.Margin = new Thickness(p.X/2f,p.Y/2f,0,0);
                 });
             }
         }
@@ -65,7 +68,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
         public Graph GraphParent { get; set; }
 
 
-        public string NodeName { get; set; }
+        public int NodeIndex { get; set; }
         [JsonIgnore]
         public Dictionary<Node,Road> Roads { get; set; }
     }

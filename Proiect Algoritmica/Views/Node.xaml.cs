@@ -40,13 +40,17 @@ namespace Proiect_Algoritmica.Views
 
         private void Ellipse_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if (NodeParent == null) return;
             NodeParent.GraphParent.GraphEditorEngine.LineCreator.EndingNode = GetNodeFromObj(sender);
             e.Handled = true;
         }
 
         private void Ellipse_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            NodeParent.GraphParent.GraphEditorEngine.LineCreator.StartingNode = GetNodeFromObj(sender);
+            if(NodeParent==null)return;
+            Scripts.Graphs.Node node = GetNodeFromObj(sender);
+            NodeParent.GraphParent.GraphEditorEngine.LineCreator.StartingNode = node;
+            NodeParent.GraphParent.GraphEditorEngine.NodeCreator.SelectedNode2 = node;
             e.Handled = true;
 
         }
@@ -54,6 +58,9 @@ namespace Proiect_Algoritmica.Views
         private void Ellipse_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             move = false;
+            if(NodeParent==null)return;
+            
+            NodeParent.GraphParent.GraphEditorEngine.NodeCreator.SelectedNode = GetNodeFromObj(sender);
         }
 
         private void Ellipse_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
