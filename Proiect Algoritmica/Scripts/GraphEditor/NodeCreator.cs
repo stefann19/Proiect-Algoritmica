@@ -129,7 +129,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             get => _selectedNode2;
             set
             {
-                GraphEditorEngine.Cleaup(Graph,null);
+                Graph.GraphEditorEngine.Cleaup(Graph,null);
                 if (_selectedNode2 != null)
                 {
                     _selectedNode2.NodeUi.Ellipse.Fill = Brushes.Cyan;
@@ -146,7 +146,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             get => _selectedNode;
             set
             {
-                GraphEditorEngine.Cleaup(Graph,null);
+                Graph.GraphEditorEngine.Cleaup(Graph,null);
                 if (_selectedNode != null)
                 {
                     _selectedNode.NodeUi.Ellipse.Fill = Brushes.Cyan;

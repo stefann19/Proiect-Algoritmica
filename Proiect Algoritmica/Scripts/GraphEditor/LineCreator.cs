@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 using Proiect_Algoritmica.Views;
 using Node = Proiect_Algoritmica.Scripts.Graphs.Node;
@@ -65,6 +67,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
 
             Point lpoint = new Point(p.X + 6, p.Y + 15);
             Point rpoint = new Point(p.X - 6, p.Y + 15);
+
             LineSegment seg1 = new LineSegment();
             seg1.Point = lpoint;
             pathFigure.Segments.Add(seg1);
@@ -85,6 +88,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             pathGeometry.Transform = transform;
             lineGroup.Children.Add(pathGeometry);
 
+
             LineGeometry connectorGeometry = new LineGeometry();
             connectorGeometry.StartPoint = p1;
             connectorGeometry.EndPoint = p2;
@@ -93,6 +97,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             path.Data = lineGroup;
             path.StrokeThickness = 2;
             path.Stroke = path.Fill = Brushes.Black;
+
 
             return path;
         }
@@ -150,10 +155,14 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         private TextBoxx CreateCostHeader(int Cost,Node startingNode, Node endingNode)
         {
             Point p = new Point((startingNode.Position.X + endingNode.Position.X) / 2f, (startingNode.Position.Y + endingNode.Position.Y) / 2f);
+            
+            double theta = Math.Atan2((startingNode.Position.Y - endingNode.Position.Y), (startingNode.Position.X - endingNode.Position.X)) * 180 / Math.PI;
+
+            Vector v = new Vector(0,20).Rotate(theta);
             TextBoxx textBox = new TextBoxx
             {
                 TextBox = {Text = Cost.ToString()},
-                Margin = new Thickness(p.X, p.Y, 0, 0)
+                Margin = new Thickness(p.X+v.X, p.Y+v.Y, 0, 0)
             };
             textBox.TextBox.TextChanged += TextBox_TextChanged;
             textBox.TextBox.MouseDoubleClick += TextBox_MouseDoubleClick;
@@ -193,5 +202,22 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         public Graph Graph { get; set; }
         public Canvas WorkSpace { get; set; }
 
+    }
+
+    public static class VectorExt
+    {
+        private const double DegToRad = Math.PI / 180;
+
+        public static Vector Rotate(this Vector v, double degrees)
+        {
+            return v.RotateRadians(degrees * DegToRad);
+        }
+
+        public static Vector RotateRadians(this Vector v, double radians)
+        {
+            var ca = Math.Cos(radians);
+            var sa = Math.Sin(radians);
+            return new Vector(ca * v.X - sa * v.Y, sa * v.X + ca * v.Y);
+        }
     }
 }

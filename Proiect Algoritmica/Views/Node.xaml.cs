@@ -30,7 +30,7 @@ namespace Proiect_Algoritmica.Views
             Ellipse.MouseLeftButtonDown += Ellipse_PreviewMouseLeftButtonDown;
             Ellipse.MouseLeftButtonUp += Ellipse_PreviewMouseLeftButtonUp;
             Ellipse.MouseMove += Ellipse_MouseMove;
-
+           
             Ellipse.MouseRightButtonDown += Ellipse_PreviewMouseRightButtonDown;
             Ellipse.MouseRightButtonUp += Ellipse_PreviewMouseRightButtonUp;
 

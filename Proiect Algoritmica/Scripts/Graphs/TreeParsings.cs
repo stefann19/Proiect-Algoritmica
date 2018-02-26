@@ -153,7 +153,16 @@ namespace Proiect_Algoritmica.Scripts.Graphs
             string Result = "";
 
             Result = "p={";
-            predecesorsList.Values.ToList().ForEach(p => { Result += p.ToString() + ","; });
+            predecesorsList.ToList().OrderBy(p=>p.Key).ToList().ForEach(p => {
+                if (p.Key != s.NodeIndex)
+                {
+                    Result += p.Value.ToString() + ",";
+                }
+                else
+                {
+                    Result += "-1,";
+                }
+            });
             Result = Result.Substring(0, Result.Length - 1);
             Result += "}\nt1={";
             timeList1.Values.ToList().ForEach(p => { Result += p.ToString() + ","; });
@@ -309,6 +318,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
 
         public static List<Road> DijkstraAlgorithm(Graph graph, Node startingNode, Node endingNode)
         {
+            if (startingNode == null || endingNode == null) return null;
             HashSet<Node> W = new HashSet<Node>(graph.Nodes.Values);
             Dictionary<Node, double> D = new Dictionary<Node, double>();
             Dictionary<Node, Node> P = new Dictionary<Node, Node>();
@@ -325,7 +335,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
                     D.Where(d => W.Any(w => w.Equals(d.Key))).OrderBy(d => d.Value).First();
                 W.Remove(minimPair.Key);
 
-                minimPair.Key.Roads.Where(road => W.Any(w => w.Equals(road.Key))).ToList().ForEach(road =>
+                minimPair.Key.Roads.Where(road => road.Value.StartingNode == minimPair.Key ).ToList().ForEach(road =>
                 {
                     if (D[minimPair.Key] + road.Value.Cost < D[road.Key])
                     {
@@ -339,6 +349,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
             Node currentNode = endingNode;
             while (currentNode != startingNode)
             {
+                if (P[currentNode] == null) return null;
                 roads.Add(currentNode.Roads[P[currentNode]]);
                 currentNode = P[currentNode];
             }
@@ -348,6 +359,8 @@ namespace Proiect_Algoritmica.Scripts.Graphs
 
         public static List<Road> BellmanFordAlgorithm(Graph graph, Node startingNode, Node endingNode)
         {
+            if (startingNode == null || endingNode == null) return null;
+
             HashSet<Node> W = new HashSet<Node>(graph.Nodes.Values);
             Dictionary<Node, double> D = new Dictionary<Node, double>();
             Dictionary<Node, double> D1 = new Dictionary<Node, double>();
@@ -393,6 +406,8 @@ namespace Proiect_Algoritmica.Scripts.Graphs
 
         public static List<Road> FloydWarshallAlgorithm(Graph graph, Node startingNode, Node endingNode)
         {
+            if (startingNode == null || endingNode == null) return null;
+
             Dictionary<Tuple<Node, Node>, double> D = new Dictionary<Tuple<Node, Node>, double>();
             Dictionary<Tuple<Node, Node>, Node> P = new Dictionary<Tuple<Node, Node>, Node>();
 
@@ -481,6 +496,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
 
         public static List<Road> EulerianCicleAlgorithm(Graph graph ,Node s)
         {
+            if (s == null) return null;
             List<Node> W = new List<Node>{s};
             Node x = s;
             List<Road> A = new List<Road>();

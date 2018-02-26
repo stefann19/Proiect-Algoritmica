@@ -74,7 +74,14 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         {
             Cleaup(Graph, GraphEditor);
             List<Road> Aa = TreeParsings.EulerianCicleAlgorithm(Graph,NodeCreator.SelectedNode);
-            Aa.ForEach(road => road.Line.Stroke = Brushes.Green);
+            if (Aa == null)
+            {
+                GraphEditor.TB_Results.Text = "No starting node selected";
+            }
+            else
+            {
+                Aa.ForEach(road => road.Line.Stroke = Brushes.Green);
+            }
         }
 
         private void BT_FLOYDWARSHALL_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -109,7 +116,14 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         {
             Cleaup(Graph,GraphEditor);
             List<Road> Aa = TreeParsings.DijkstraAlgorithm(Graph,NodeCreator.SelectedNode,NodeCreator.SelectedNode2);
-            Aa.ForEach(road => road.Line.Stroke = Brushes.Green);
+            if (Aa == null)
+            {
+                GraphEditor.TB_Results.Text = "No path found...";
+            }
+            else
+            {
+                Aa.ForEach(road => road.Line.Stroke = Brushes.Green);
+            }
         }
 
         private void BT_PrimeTree_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -117,15 +131,18 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             Cleaup(Graph,GraphEditor);
             List<Road> Aa = TreeParsings.PrimeTree(Graph);
             Aa.ForEach(road => road.Line.Stroke = Brushes.Green);
+            GraphEditor.TB_Results.Text = Aa.Select(road => road.ToString()).Aggregate((a, b) => a + $"\n{b}");
+
         }
 
-    
+
 
         private void BT_KruskalTree_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Cleaup(Graph,GraphEditor);
             List<Road> Aa = TreeParsings.KruskalTree(Graph);
             Aa.ForEach(road => road.Line.Stroke = Brushes.Green);
+            GraphEditor.TB_Results.Text = Aa.Select(road => road.ToString()).Aggregate((a, b) => a + $"\n{b}");
 
         }
         private void BT_GenericTree_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -133,7 +150,7 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             Cleaup(Graph,GraphEditor);
             List<Road> Aa = TreeParsings.GenericTree(Graph);
             Aa.ForEach(road=> road.Line.Stroke = Brushes.Green);
-
+            GraphEditor.TB_Results.Text = Aa.Select(road=>road.ToString()).Aggregate((a,b)=> a+$"\n{b}");
         }
 
         private void BT_DFParsing_PreviewMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -156,11 +173,11 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             Cleaup(Graph,GraphEditor);
             GraphEditor.TB_Results.Text = TreeParsings.GenericParsing(Graph,NodeCreator.SelectedNode);
         }
-        public static void Cleaup(Graph graph,Proiect_Algoritmica.GraphEditor graphEditor)
+        public void Cleaup(Graph graph,Proiect_Algoritmica.GraphEditor graphEditor)
         {
             graph.Roads.ToList().ForEach(road => road.Line.Stroke = Brushes.DarkCyan);
             if(graphEditor==null)return;
-            
+            GraphEditor.Flyout.IsOpen = true;
             graphEditor.TB_Results.Text = "";
         }
 

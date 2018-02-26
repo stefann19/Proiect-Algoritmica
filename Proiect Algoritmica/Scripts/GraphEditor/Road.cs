@@ -61,6 +61,11 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             }
         }
 
+        public override string ToString()
+        {
+            return $"[{StaringNodeIndex},{Cost},{EndingNodeIndex}]";
+        }
+
         public int StaringNodeIndex { get; set; }
         public int EndingNodeIndex { get; set; }
     }

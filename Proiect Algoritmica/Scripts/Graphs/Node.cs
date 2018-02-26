@@ -41,6 +41,8 @@ namespace Proiect_Algoritmica.Scripts.Graphs
                 _position = value; 
                 if(NodeUi==null)return;
                 NodeUi.Margin = new Thickness(value.X-MyConstants.NodeSize/2f,value.Y-MyConstants.NodeSize/2f,0,0);
+
+
                 Roads?.Values.ToList().ForEach(road =>
                 {
                     road.StartingNode.GraphParent.GraphEditorEngine.GraphEditor.WorkSpace.Children.Remove(road.Line);
@@ -59,8 +61,10 @@ namespace Proiect_Algoritmica.Scripts.Graphs
                     //    road.Line.Y2 = value.Y;
                     //}
                     Point p = new Point(road.StartingNode.Position.X + road.EndingNode.Position.X, road.StartingNode.Position.Y + road.EndingNode.Position.Y);
-                    road.CostHeader.Margin = new Thickness(p.X/2f,p.Y/2f,0,0);
+                    road.CostHeader.Margin = new Thickness(p.X / 2f, p.Y / 2f, 0, 0);
                 });
+
+              
             }
         }
 
