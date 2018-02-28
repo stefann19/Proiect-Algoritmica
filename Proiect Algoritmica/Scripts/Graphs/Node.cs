@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using Newtonsoft.Json;
 using Proiect_Algoritmica.Scripts.GraphEditor;
 using Proiect_Algoritmica.Views;
@@ -17,7 +18,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
         public Node()
         {
             Roads = new Dictionary<Node, Road>();
-
+            RoadsList = new List<Road>();
         }
 
         public Node(Views.Node nodeUi, int nodeName)
@@ -26,6 +27,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
             NodeIndex = nodeName;
             Position = new Point(NodeUi.Margin.Left+NodeUi.Width/2f,NodeUi.Margin.Top+NodeUi.Height/2f);
             Roads = new Dictionary<Node, Road>();
+            RoadsList = new List<Road>();
         }
         [JsonIgnore]
         public Views.Node NodeUi { get; set; }
@@ -41,9 +43,15 @@ namespace Proiect_Algoritmica.Scripts.Graphs
                 _position = value; 
                 if(NodeUi==null)return;
                 NodeUi.Margin = new Thickness(value.X-MyConstants.NodeSize/2f,value.Y-MyConstants.NodeSize/2f,0,0);
+/*
+                List<Road> roads = new List<Road>();
+                if(Roads?.Values ==null)return;
+                
+                roads.AddRange(Roads.Values);
 
+                Roads.Values.ToList().ForEach(road=> roads.AddRange(road.EndingNode.Roads.Values.Where(r=> r.EndingNode == this)) );*/
 
-                Roads?.Values.ToList().ForEach(road =>
+                RoadsList?.ToList().ForEach(road =>
                 {
                     road.StartingNode.GraphParent.GraphEditorEngine.GraphEditor.WorkSpace.Children.Remove(road.Line);
                     road.Line = LineCreator.CreateLine(road.StartingNode, road.EndingNode);
@@ -61,10 +69,11 @@ namespace Proiect_Algoritmica.Scripts.Graphs
                     //    road.Line.Y2 = value.Y;
                     //}
                     Point p = new Point(road.StartingNode.Position.X + road.EndingNode.Position.X, road.StartingNode.Position.Y + road.EndingNode.Position.Y);
-                    road.CostHeader.Margin = new Thickness(p.X / 2f, p.Y / 2f, 0, 0);
+                    road.CostHeader.Margin = LineCreator.GetCostHeaderPos(road.StartingNode,road.EndingNode);
                 });
 
-              
+                
+
             }
         }
 
@@ -75,5 +84,7 @@ namespace Proiect_Algoritmica.Scripts.Graphs
         public int NodeIndex { get; set; }
         [JsonIgnore]
         public Dictionary<Node,Road> Roads { get; set; }
+        [JsonIgnore]
+        public List<Road> RoadsList { get; set; }
     }
 }

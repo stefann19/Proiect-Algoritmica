@@ -33,8 +33,13 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
                 WorkSpace.Children.Add(road.Line);
                 road.CostHeader = CreateCostHeader((int)road.Cost, road.StartingNode, road.EndingNode);
                 road.CostHeader.ParentRoad = road;
+              /*  if (Graph.Nodes[road.StaringNodeIndex].Roads.ContainsKey(road.EndingNode)) return;*/
                 Graph.Nodes[road.StaringNodeIndex].Roads.Add(road.EndingNode,road);
-                Graph.Nodes[road.EndingNodeIndex].Roads.Add(road.StartingNode, road);
+
+                Graph.Nodes[road.StaringNodeIndex].RoadsList.Add(road);
+                Graph.Nodes[road.EndingNodeIndex].RoadsList.Add(road);
+
+                /*Graph.Nodes[road.EndingNodeIndex].Roads.Add(road.StartingNode, road);*/
             });
         }
 
@@ -53,6 +58,9 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
         public static Shape DrawLinkArrow(Point p1, Point p2)
         {
             Vector v = Point.Subtract(p2, p1);
+            if(p1 == p2)
+                v = new Vector(0,0);
+            else
             v.Normalize();
             p1 = p1 + v * MyConstants.NodeSize / 2f;
             p2 = p2 - v * MyConstants.NodeSize / 2f;
@@ -62,7 +70,8 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
 
             PathGeometry pathGeometry = new PathGeometry();
             PathFigure pathFigure = new PathFigure();
-            Point p = new Point(p1.X  +((p2.X - p1.X) / 1), p1.Y +((p2.Y - p1.Y) / 1));
+            Point p = p2;
+            
             pathFigure.StartPoint = p;
 
             Point lpoint = new Point(p.X + 6, p.Y + 15);
@@ -89,17 +98,95 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             lineGroup.Children.Add(pathGeometry);
 
 
-            LineGeometry connectorGeometry = new LineGeometry();
-            connectorGeometry.StartPoint = p1;
-            connectorGeometry.EndPoint = p2;
-            lineGroup.Children.Add(connectorGeometry);
+            /* LineGeometry connectorGeometry = new LineGeometry();
+             connectorGeometry.StartPoint = p1;
+             connectorGeometry.EndPoint = p2;
+             lineGroup.Children.Add(connectorGeometry);
+ */
+            int drift = 40;
+            Point p3 = (Point)(((Vector)p1 + (Vector)p2) / 2f + new Vector(0, drift).Rotate(theta));
+            Point p4 = (Point)(((Vector)p1 + (Vector)p2) / 2f + new Vector(drift, 0).Rotate(theta));
+            if (p1 == p2)
+            {
+                drift = 120;
+                p3 = (Point)(((Vector)p1 + new Vector(drift, drift).Rotate(theta)));
+                p4 = (Point)(((Vector)p1 + new Vector(-drift, drift).Rotate(theta)));
+            }
+            
+
+            PathGeometry pathGeometryy = MakePathGeometry(p1, p2,p3,p4);
+
+            lineGroup.Children.Add(pathGeometryy);
+
+
             System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
             path.Data = lineGroup;
             path.StrokeThickness = 2;
-            path.Stroke = path.Fill = Brushes.Black;
+            path.Stroke = Brushes.Transparent;
+            path.Fill = Brushes.Transparent;
 
 
             return path;
+        }
+
+        private static PathGeometry MakePathGeometry(Point p1,Point p2,Point p3,Point p4)
+        {
+            PathGeometry pathGeometry = new PathGeometry();
+
+            pathGeometry.FillRule = FillRule.Nonzero;
+            
+
+            PathFigure pathFigure = new PathFigure();
+
+            pathFigure.StartPoint = p1;
+
+            pathFigure.IsClosed = false;
+
+            pathGeometry.Figures.Add(pathFigure);
+
+            
+
+
+         /*   LineSegment lineSegment1 = new LineSegment();
+
+            lineSegment1.Point = new Point(198, 48.6667);
+
+            pathFigure.Segments.Add(lineSegment1);
+
+
+
+            LineSegment lineSegment2 = new LineSegment();
+
+            lineSegment2.Point = new Point(198, 102);
+
+            pathFigure.Segments.Add(lineSegment2);
+*/
+
+
+            BezierSegment bezierSegment1 = new BezierSegment();
+
+            bezierSegment1.Point1 = p3;
+
+            bezierSegment1.Point2 = p4;
+
+            bezierSegment1.Point3 = p2;
+            
+
+            pathFigure.Segments.Add(bezierSegment1);
+
+
+
+           /* BezierSegment bezierSegment2 = new BezierSegment();
+
+            bezierSegment2.Point1 = new Point(64.667, 149.111);
+
+            bezierSegment2.Point2 = new Point(58.4444, 130.444);
+
+            bezierSegment2.Point3 = new Point(47.7778, 118.889);
+
+            pathFigure.Segments.Add(bezierSegment2);*/
+
+            return pathGeometry;
         }
 
         public static Shape CreateLine(Node startingNode,Node endingNode)
@@ -126,9 +213,10 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
 
         public void CreateRoad(Node startingNode, Node endingNode)
         {
-            if(startingNode == endingNode)return;
+            //if(startingNode == endingNode)return;
+
             Shape line = CreateLine(startingNode, endingNode);
-            if (Graph.Nodes[startingNode.NodeIndex].Roads.ContainsKey(endingNode)) return;
+            if (Graph.Nodes[startingNode.NodeIndex].Roads.ContainsKey(endingNode)/* && Graph.Nodes[startingNode.NodeIndex].Roads[endingNode].StartingNode == startingNode*/) return;
             WorkSpace.Children.Add(line);
             StartingNode = null;
             EndingNode = null;
@@ -148,21 +236,36 @@ namespace Proiect_Algoritmica.Scripts.GraphEditor
             };
             road.CostHeader.ParentRoad = road;
             Graph.Roads.Add(road);
-            Graph.Nodes[road.StaringNodeIndex].Roads.Add(road.EndingNode, road);
-            Graph.Nodes[road.EndingNodeIndex].Roads.Add(road.StartingNode, road);
+            /*if(Graph.Nodes[road.StaringNodeIndex].Roads.ContainsKey(road.EndingNode)) return;*/
+            
+            startingNode.Roads.Add(road.EndingNode, road);
+            endingNode.RoadsList.Add(road);
+            startingNode.RoadsList.Add(road);
+            /*Graph.Nodes[road.EndingNodeIndex].Roads.Add(road.StartingNode, road);*/
+        }
+
+        public static Thickness GetCostHeaderPos(Node startingNode, Node endingNode)
+        {
+            Point p = new Point((startingNode.Position.X + endingNode.Position.X) / 2f, (startingNode.Position.Y + endingNode.Position.Y) / 2f);
+
+            double theta = Math.Atan2((startingNode.Position.Y - endingNode.Position.Y), (startingNode.Position.X - endingNode.Position.X)) * 180 / Math.PI;
+
+            Vector v = new Vector(0, 80).Rotate(theta);
+
+            return new Thickness(p.X + v.X, p.Y + v.Y, 0, 0);
         }
 
         private TextBoxx CreateCostHeader(int Cost,Node startingNode, Node endingNode)
         {
-            Point p = new Point((startingNode.Position.X + endingNode.Position.X) / 2f, (startingNode.Position.Y + endingNode.Position.Y) / 2f);
+            /*Point p = new Point((startingNode.Position.X + endingNode.Position.X) / 2f, (startingNode.Position.Y + endingNode.Position.Y) / 2f);
             
             double theta = Math.Atan2((startingNode.Position.Y - endingNode.Position.Y), (startingNode.Position.X - endingNode.Position.X)) * 180 / Math.PI;
 
-            Vector v = new Vector(0,20).Rotate(theta);
+            Vector v = new Vector(0,50).Rotate(theta);*/
             TextBoxx textBox = new TextBoxx
             {
                 TextBox = {Text = Cost.ToString()},
-                Margin = new Thickness(p.X+v.X, p.Y+v.Y, 0, 0)
+                Margin = GetCostHeaderPos(startingNode,endingNode)
             };
             textBox.TextBox.TextChanged += TextBox_TextChanged;
             textBox.TextBox.MouseDoubleClick += TextBox_MouseDoubleClick;
